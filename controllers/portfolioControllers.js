@@ -1,5 +1,5 @@
 import { Intro ,About,Projects , Education ,Contact } from "../models/portfolioModel.js";
-import { about, contacts, education, intro, projects } from "../../server/staticData.js";
+import { about, contacts, education, intro, projects } from "../staticData.js";
 
 
 
