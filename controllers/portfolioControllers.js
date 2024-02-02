@@ -5,11 +5,11 @@ import { about, contacts, education, intro, projects } from "../staticData.js";
 
 export const getPortfolioData=async(req,res)=>{
   try{
-    const intros = await Intro.find();
-    const abouts = await About.find();
-    const projects = await Projects.find();
-    const contacts = await Contact.find();
-    const educations = await Education.find();
+    const intros = await Intro.find({});
+    const abouts = await About.find({});
+    const projects = await Projects.find({});
+    const contacts = await Contact.find({});
+    const educations = await Education.find({});
     // console.log("intros ",intros);
     // console.log("abouts ",abouts);
     // console.log("projects ",projects);

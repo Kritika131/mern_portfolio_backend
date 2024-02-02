@@ -18,11 +18,13 @@ const port = process.env.PORT ||  6060
 // middlewares 
 app.use(express.json())
 app.use(cors())
-app.use('/api/portfolio',portfolioRoute)
-app.use('/api/admin',adminRoute)
+app.use('/portfolio',portfolioRoute)
+app.use('/admin',adminRoute)
 
 
-
+app.get("/",(req,res)=>{
+  res.send("hello")
+})
 connect().then(()=>{
   try{
     app.listen(port,()=>{
