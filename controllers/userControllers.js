@@ -12,8 +12,9 @@ export const adminSignUp = async(req,res)=>{
       
    
     //check if user exist
-    const query = userModel.where({ email});
-const existingUser = await query.findOne();
+    // const query = userModel.where({ email});
+const existingUser = await userModel.find();
+console.log("Ex--",existingUser);
     // const existingUser = await userModel.find({email})
     if(existingUser){
       
@@ -50,7 +51,9 @@ export const forgotPassword=async(req,res)=>{
       try{
         console.log(req.body);
         const {email,password} = req.body;
-        const existingUser = await userModel.findOne({email})
+        // const existingUser = await userModel.findOne({email})
+         const query = userModel.where({ email});
+         const existingUser = await query.findOne();
         if(!existingUser){ 
           
           return res.status(400).json({success:false,msg:"User doesn't exist!"})
@@ -60,15 +63,16 @@ export const forgotPassword=async(req,res)=>{
         const salt = await bcrypt.genSalt()
         const newhashPass = await bcrypt.hash(password,salt)
         existingUser.password = newhashPass;
-        console.log("erxiuserpass----",existingUser);
+        console.log("erxiuserpass id----",existingUser._id);
         const updateUser = await userModel.findByIdAndUpdate(
           {_id:existingUser._id},
           existingUser,
           {new:true}
           );
+          console.log("updateUser-->",updateUser);
           if(updateUser){ 
-            return res.status(200).json({success:true,msg:"Password updated successfully!"})
             console.log(updateUser);
+            return res.status(200).json({success:true,msg:"Password updated successfully!"})
              
           } else {
             return res.status(400).json({success:false,msg:"Some Error occur while updating password!"})
