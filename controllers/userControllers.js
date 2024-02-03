@@ -16,10 +16,10 @@ export const adminSignUp = async(req,res)=>{
 const existingUser = await userModel.find();
 console.log("Ex--",existingUser);
     // const existingUser = await userModel.find({email})
-    if(existingUser){
+    if(existingUser){  
       
       // return res.status(400).json({success:false,msg:"User already exists!"})
-      return res.status(200).json({success:true,msg:"Admin already exists! Please proceed to login"})
+      return res.status(200).json({success:false,msg:"Admin already exists! Please proceed to login"})
     }
      
     //hash the password
