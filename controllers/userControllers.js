@@ -17,7 +17,8 @@ const existingUser = await query.findOne();
     // const existingUser = await userModel.find({email})
     if(existingUser){
       
-      return res.status(400).json({success:false,msg:"User already exists!"})
+      // return res.status(400).json({success:false,msg:"User already exists!"})
+      return res.status(200).json({success:true,msg:"Admin already exists! Please proceed to login"})
     }
      
     //hash the password
@@ -35,13 +36,48 @@ const existingUser = await query.findOne();
       return res.status(200).json({success:true,msg:"User registered successfully!",user:userDocc})
        
     } else {
-      return res.status(200).json({success:false,msg:"Some Error occur while creating new user!"})
+      return res.status(400).json({success:false,msg:"Some Error occur while creating new user!"})
 
     }
 
   } catch(err){
     res.status(500).json({success:false,msg:"Registration failed!", error:err.message})
     console.log("signup-----",err);
+  }
+}
+
+export const forgotPassword=async(req,res)=>{
+      try{
+        console.log(req.body);
+        const {email,password} = req.body;
+        const existingUser = await userModel.findOne({email})
+        if(!existingUser){ 
+          
+          return res.status(400).json({success:false,msg:"User doesn't exist!"})
+        }
+        console.log("erxiuser----",existingUser);
+        delete existingUser.password;
+        const salt = await bcrypt.genSalt()
+        const newhashPass = await bcrypt.hash(password,salt)
+        existingUser.password = newhashPass;
+        console.log("erxiuserpass----",existingUser);
+        const updateUser = await userModel.findByIdAndUpdate(
+          {_id:existingUser._id},
+          existingUser,
+          {new:true}
+          );
+          if(updateUser){ 
+            return res.status(200).json({success:true,msg:"Password updated successfully!"})
+            console.log(updateUser);
+             
+          } else {
+            return res.status(400).json({success:false,msg:"Some Error occur while updating password!"})
+      
+          }
+        
+      }catch(err){
+       res.status(500).json({success:false,msg:"Password Doesn't recover!", error:err.message})
+       console.log("password-----",err);
   }
 }
 
