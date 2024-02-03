@@ -9,15 +9,17 @@ export const adminSignUp = async(req,res)=>{
    
     const {email,password} = req.body
     
-     
+      
    
     //check if user exist
-    const existingUser = await userModel.findOne({email})
+    const query = userModel.where({ email});
+const existingUser = await query.findOne();
+    // const existingUser = await userModel.find({email})
     if(existingUser){
       
       return res.status(400).json({success:false,msg:"User already exists!"})
     }
-    
+     
     //hash the password
     const salt = await bcrypt.genSalt()
     const hashPass = await bcrypt.hash(password,salt)
@@ -45,9 +47,10 @@ export const adminSignUp = async(req,res)=>{
 
 export const adminLogin=async(req,res)=>{
   try{
+    console.log(req.body);
     const {email,password} = req.body;
     const existingUser = await userModel.findOne({email})
-    if(!existingUser){
+    if(!existingUser){ 
       
       return res.status(400).json({success:false,msg:"User doesn't exist!"})
     }
